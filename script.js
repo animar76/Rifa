@@ -1,5 +1,6 @@
-const URL_GOOGLE = "TU_URL_DE_APPS_SCRIPT_AQUIhttps://script.google.com/macros/s/AKfycbzoakIRy8AXz1b3gVm0zrRQXJWl0F2oXwhM6qdMYBJm7Ms3vJsIaeTXMcqmlMOSXF_dCA/exec"; 
-const CLAVE_ADMIN = "25767.Ctes.76"; 
+// CONFIGURACIÓN - IMPORTANTE: Reemplaza con tu URL de implementación de Google
+const URL_GOOGLE = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
+const CLAVE_ADMIN = "1234"; 
 
 let numElegido = null;
 
@@ -15,24 +16,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     iniciarNieve();
     animarSanta();
-    cargarVendidos();
+    cargarVendidos(); // Consulta a Google al abrir la página
 });
 
+// Función para consultar a Google Sheets qué números ya están ocupados
 async function cargarVendidos() {
     try {
         const res = await fetch(URL_GOOGLE);
         const ocupados = await res.json();
+        
         ocupados.forEach(n => {
-            const el = document.getElementById(`num-${n}`);
-            if(el) { el.classList.add('vendido'); el.onclick = null; }
+            marcarComoVendido(n);
         });
-        document.getElementById('contador-ventas').innerText = `${ocupados.length}/100 Vendidos`;
-    } catch(e) { document.getElementById('contador-ventas').innerText = "Disponibilidad: 100 Números"; }
+        
+        actualizarContador(ocupados.length);
+    } catch(e) { 
+        console.error("Error cargando vendidos:", e);
+        document.getElementById('contador-ventas').innerText = "Disponibilidad: 100 Números"; 
+    }
+}
+
+// Función auxiliar para tachar el número
+function marcarComoVendido(n) {
+    const el = document.getElementById(`num-${n}`);
+    if(el) {
+        el.classList.add('vendido');
+        el.onclick = null; // Deshabilita el clic
+    }
+}
+
+function actualizarContador(cantidad) {
+    document.getElementById('contador-ventas').innerText = `${cantidad}/100 Números vendidos`;
 }
 
 function abrirRegistro(n) {
     const audio = document.getElementById('sonido-campana');
-    audio.currentTime = 0; audio.play();
+    audio.currentTime = 0; 
+    audio.play();
+
     numElegido = n;
     document.getElementById('txtNumeroSeleccionado').innerText = `NÚMERO ELEGIDO: ${n}`;
     document.getElementById('modal').style.display = 'block';
@@ -46,20 +67,17 @@ function validarCheck() {
 
 function mostrarTextoTerminos() {
     alert(
-`Términos y Condiciones: Rifa Notebook Banghó Best Pro T5
-i7 8gb RAM 480GB SSD
-
+`Términos y Condiciones: Rifa Notebook Banghó Best Pro T5\n
 1. OBJETO: Notebook Banghó i7 15" + Auriculares BT de Regalo.
-2. VALOR: $15.000 por número. Confirmación tras pago y registro.
-3. VENTA TOTAL: Sorteo sujeto a la venta de los 100 números. La fecha se fijará al completar el 100%.
-4. NOTIFICACIÓN: Vía Grupo de WhatsApp con 48hs de antelación.
-5. MECÁNICA: App Sorteos en vivo. Ganador titular y suplente.
-6. ENTREGA: Coordinar en Corrientes Capital. Envío a cargo de organizador si es al interior. Presentar DNI.
-7. CANCELACIÓN: Devolución del 100% en 5 días hábiles si se cancela.`
+2. VALOR: $15.000 por número.
+3. VENTA TOTAL: El sorteo se realiza al vender los 100 números.
+4. ENTREGA: Corrientes Capital o envío a cargo del organizador.`
     );
 }
 
+// ESTA ES LA FUNCIÓN QUE AHORA TACHA EL NÚMERO DE FORMA INMEDIATA
 async function confirmarCompra() {
+    const btn = document.getElementById('btn-confirmar-final');
     const datos = {
         Numero: numElegido,
         Nombre: document.getElementById('nombre').value,
@@ -68,30 +86,67 @@ async function confirmarCompra() {
         Direccion: document.getElementById('direccion').value,
         Fecha: new Date().toLocaleString()
     };
-    if(!datos.Nombre || !datos.DNI || !datos.Celular) return alert("Completa los campos.");
+
+    if(!datos.Nombre || !datos.DNI || !datos.Celular) {
+        return alert("Por favor, completa Nombre, DNI y Celular.");
+    }
+
+    // Bloqueamos el botón para evitar múltiples clics
+    btn.disabled = true;
+    btn.innerText = "PROCESANDO...";
 
     try {
-        await fetch(URL_GOOGLE, { method: 'POST', mode: 'no-cors', body: JSON.stringify(datos) });
-        alert("¡Reserva exitosa! Envíe el comprobante por WhatsApp.");
-        location.reload();
-    } catch(e) { alert("Error al registrar."); }
+        // 1. Enviamos a Google (con modo 'no-cors' para evitar errores de bloqueo)
+        await fetch(URL_GOOGLE, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: JSON.stringify(datos) 
+        });
+
+        // 2. TACHADO INSTANTÁNEO LOCAL (Feedback para el usuario)
+        marcarComoVendido(numElegido);
+        
+        alert(`¡Reserva exitosa del número ${numElegido}! Recuerda enviar el comprobante de pago por WhatsApp.`);
+        
+        cerrarModal();
+        
+        // 3. Recargamos después de 2 segundos para asegurar que Google registró todo
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
+
+    } catch(e) { 
+        alert("Hubo un error al conectar con el servidor. Intenta de nuevo."); 
+        btn.disabled = false;
+        btn.innerText = "RESERVAR AHORA";
+    }
 }
 
 function cerrarModal() {
     document.getElementById('modal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
+    // Limpiamos el formulario
+    document.getElementById('nombre').value = "";
+    document.getElementById('dni').value = "";
+    document.getElementById('celular').value = "";
+    document.getElementById('direccion').value = "";
+    document.getElementById('acepto-terminos').checked = false;
 }
 
+// Animaciones (Papá Noel y Nieve)
 function animarSanta() {
     const santa = document.getElementById('papa-noel');
     let i = 0;
     setInterval(() => {
-        const nums = document.querySelectorAll('.numero');
-        const rect = nums[i].getBoundingClientRect();
-        const wrapper = document.querySelector('.grilla-wrapper').getBoundingClientRect();
-        santa.style.left = (rect.left - wrapper.left) + "px";
-        santa.style.top = (rect.top - wrapper.top - 25) + "px";
-        i = (i + 1) % 100;
+        const nums = document.querySelectorAll('.numero:not(.vendido)');
+        if(nums.length > 0) {
+            const target = nums[i % nums.length];
+            const rect = target.getBoundingClientRect();
+            const wrapper = document.querySelector('.grilla-wrapper').getBoundingClientRect();
+            santa.style.left = (rect.left - wrapper.left) + "px";
+            santa.style.top = (rect.top - wrapper.top - 25) + "px";
+            i++;
+        }
     }, 1200);
 }
 
@@ -108,5 +163,5 @@ function iniciarNieve() {
 }
 
 function accesoAdmin() {
-    if(prompt("Clave:") === CLAVE_ADMIN) alert("Acceso correcto.");
+    if(prompt("Clave:") === CLAVE_ADMIN) alert("Acceso correcto. Los datos están en tu Google Sheet.");
 }
