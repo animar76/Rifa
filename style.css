@@ -1,0 +1,163 @@
+:root {
+    --dorado: #d4af37;
+    --rojo: #8b0000;
+    --verde: #165b33;
+    --oscuro: #0a0a0a;
+}
+
+body {
+    background-color: var(--oscuro);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+    padding: 30px 0;
+    text-align: center;
+    border-bottom: 3px solid var(--dorado);
+    background: linear-gradient(rgba(139, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
+}
+
+.prize-display {
+    position: relative;
+    max-width: 320px;
+    margin: 15px auto;
+}
+
+.notebook-img {
+    width: 100%;
+    filter: drop-shadow(0 10px 20px rgba(212, 175, 55, 0.4));
+    transition: transform 0.4s;
+}
+
+.notebook-img:hover { transform: scale(1.05); }
+
+.gift-tag {
+    position: absolute;
+    bottom: 0; right: -10px;
+    background: var(--verde);
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 5px;
+    transform: rotate(-5deg);
+    border: 1px solid var(--dorado);
+}
+
+.prize-badge {
+    background: var(--dorado);
+    color: black;
+    padding: 8px 20px;
+    font-weight: bold;
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 1.1em;
+}
+
+.precio-tag { font-size: 1.5em; color: var(--dorado); margin: 10px 0; }
+
+.grilla-wrapper { position: relative; padding: 20px; }
+
+.grilla {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.numero {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, var(--rojo), #400);
+    border: 1px solid var(--dorado);
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.numero.vendido {
+    background: #222 !important;
+    border-color: #111;
+    color: #555;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+.papa-noel {
+    position: absolute;
+    width: 50px;
+    pointer-events: none;
+    z-index: 100;
+    transition: all 0.8s ease-in-out;
+}
+
+/* WhatsApp Botón */
+.whatsapp-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25d366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.modal {
+    display: none; position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white; color: #333; padding: 25px;
+    border-radius: 15px; width: 90%; max-width: 400px; z-index: 1001;
+}
+
+.form-group input {
+    width: 100%; padding: 12px; margin: 6px 0;
+    box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc;
+}
+
+.link-terms { color: var(--rojo); text-decoration: underline; cursor: pointer; font-weight: bold; }
+
+.btn-confirmar {
+    width: 100%; padding: 15px; background: var(--verde);
+    color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
+}
+
+.btn-confirmar:disabled { background: #ccc; cursor: not-allowed; }
+
+.btn-cancelar { width: 100%; padding: 10px; background: #888; color: white; border: none; border-radius: 5px; margin-top: 8px; cursor: pointer; }
+
+.overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; }
+
+.snow-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+
+@media (max-width: 600px) { 
+    .grilla { grid-template-columns: repeat(5, 1fr); }
+    .whatsapp-btn span { display: none; }
+    .whatsapp-btn { padding: 15px; border-radius: 50%; }
+}

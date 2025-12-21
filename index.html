@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gran Rifa Notebook Banghó i7 - Corrientes Capital</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="snow-container" id="snow"></div>
+
+    <header>
+        <div class="header-content">
+            <h1>🎄 GRAN RIFA DE FIN DE AÑO 🎁</h1>
+            <div class="prize-badge">Notebook Banghó Best Pro T5 i7</div>
+            
+            <div class="prize-display">
+                <img src="NB.png" alt="Notebook Banghó i7" class="notebook-img">
+                <div class="gift-tag">+ Auriculares BT de Regalo!</div>
+            </div>
+
+            <p class="specs">i7 | 8GB RAM | 480GB SSD | 15"</p>
+            <div class="status-bar">
+                <span id="contador-ventas">Consultando disponibilidad...</span>
+            </div>
+            <p class="precio-tag">Valor del número: <strong>$15.000</strong></p>
+        </div>
+    </header>
+
+    <main>
+        <div class="grilla-wrapper">
+            <div class="grilla" id="grilla"></div>
+            <img id="papa-noel" class="papa-noel" src="PN2.png" alt="Santa">
+        </div>
+    </main>
+
+    <a href="https://wa.me/543794403781?text=Hola!%20Quiero%20consultar%20por%20la%20rifa%20de%20la%20Notebook" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>Consultas</span>
+    </a>
+
+    <div class="overlay" id="overlay"></div>
+    <div id="modal" class="modal">
+        <h3>📝 Registro de Participante</h3>
+        <p id="txtNumeroSeleccionado" class="highlight-num"></p>
+        
+        <div class="form-group">
+            <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
+            <input type="text" id="dni" placeholder="D.N.I." required>
+            <input type="text" id="celular" placeholder="Teléfono (WhatsApp)" required>
+            <input type="text" id="direccion" placeholder="Dirección Completa" required>
+        </div>
+
+        <div class="terms-container">
+            <input type="checkbox" id="acepto-terminos" onchange="validarCheck()">
+            <label for="acepto-terminos">
+                He leído y acepto los <span class="link-terms" onclick="mostrarTextoTerminos()">Términos y Condiciones</span>.
+            </label>
+        </div>
+
+        <button id="btn-confirmar-final" class="btn-confirmar" onclick="confirmarCompra()" disabled>RESERVAR AHORA</button>
+        <button class="btn-cancelar" onclick="cerrarModal()">Volver</button>
+    </div>
+
+    <footer>
+        <p>📍 Corrientes Capital | Sorteo en Vivo por App Sorteos</p>
+        <button class="btn-admin" onclick="accesoAdmin()">Panel Admin</button>
+    </footer>
+
+    <audio id="sonido-campana" src="coin.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
