@@ -1,6 +1,6 @@
 // CONFIGURACIÓN - IMPORTANTE: Reemplaza con tu URL de implementación de Google
-const URL_GOOGLE = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
-const CLAVE_ADMIN = "1234"; 
+const URL_GOOGLE = "https://script.google.com/macros/s/AKfycbzoakIRy8AXz1b3gVm0zrRQXJWl0F2oXwhM6qdMYBJm7Ms3vJsIaeTXMcqmlMOSXF_dCA/exec_URL_DE_APPS_SCRIPT_AQUI"; 
+const CLAVE_ADMIN = "123425767.Ctes@26"; 
 
 let numElegido = null;
 
