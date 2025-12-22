@@ -187,13 +187,35 @@ function iniciarNieve() {
 
 function mostrarTextoTerminos() {
     alert(
-"Términos y Condiciones: Rifa Notebook Banghó Best Pro T5
-i7 8gb RAM 480GB SSD
-
-1. OBJETO: Sorteo de Notebook Banghó i7 + Auriculares BT.
-2. VALOR: $15.000 por número.
-3. CONDICIÓN: El sorteo se realiza al vender los 100 números.
-4. SORTEO: Vivo por App Sorteos (se avisará 48hs antes).
-5. ENTREGA: Corrientes Capital (interior envío a cargo de organizador)."
+"Términos y Condiciones: Rifa Notebook Banghó Best Pro T5 i7 8gb RAM 480GB SSD
+1. Objeto del Sorteo
+La presente rifa es organizada con el fin de sortear una Notebook Banghó Best Pro T5 i7 8gb RAM 480GB SSD con las siguientes especificaciones técnicas:
+•	Procesador: Intel Core i7.
+•	Memoria RAM: 8GB.
+•	Almacenamiento: 480GB SSD.
+•	Pantalla: 15 pulgadas.
+•	Incluye: Auriculares Bluetooth  de Regalo!
+2. Valor del Número y Participación
+•	El valor de cada número es de $15.000.
+•	La participación se confirma únicamente tras la recepción del pago y el registro de los datos del comprador (Nombre, Apellido, D.N.I. , Teléfono de contacto y dirección).
+•	No hay límite de números por persona.
+3. Condición de Ejecución del Sorteo (Cláusula de Venta Total)
+El sorteo está sujeto a la venta de la totalidad de los 100 números disponibles.
+Importante: La fecha del sorteo no está fijada de antemano. El sorteo se realizará de manera efectiva una vez que se haya vendido y cobrado el 100% de los números emitidos.
+4. Notificación de la Fecha del Sorteo
+Una vez alcanzada la meta de venta total, notificará a todos los participantes la fecha y hora exacta del sorteo a través de:
+•	Grupo de WhatsApp.
+•	La notificación se realizará con un mínimo de 48 horas de antelación.
+5. Mecánica del Sorteo
+El sorteo se llevará a cabo mediante:
+•	Plataforma digital de App Sorteos con transmisión en vivo.
+•	Se elegirá un ganador titular y un suplente en caso de no poder contactar al primero.
+6. Entrega del Premio
+•	El ganador será contactado al número telefónico proporcionado al momento de la compra.
+•	El premio deberá ser retirado o coordinado en Corrientes Capital o el envío quedará a cargo de organizador si fuera del interior.
+•	Para retirar el premio, el ganador deberá presentar su DNI y, de ser necesario, el comprobante de pago del número.
+7. Cancelación
+En caso de que el organizador decida cancelar la rifa por fuerza mayor antes de completar la venta, se procederá a la devolución del 100% del dinero a cada participante en un plazo de 5 días hábiles.
+."
     );
 }
