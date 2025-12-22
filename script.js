@@ -1,5 +1,5 @@
 // CONFIGURACIÓN DE SUPABASE
-const SUPABASE_URL = "db.ssqgqkvttrwipvhltvxs.supabase.co";
+const SUPABASE_URL = "https://ssqgqkvttrwipvhltvxs.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzcWdxa3Z0dHJ3aXB2aGx0dnhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYzNTE0OTAsImV4cCI6MjA4MTkyNzQ5MH0.IdpquKkTIWf-4eTcskCKVCWQdpgPImJmJhcG8ZXDwro";
 const CLAVE_ADMIN = "25767.Ctes@26";
 
