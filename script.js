@@ -186,5 +186,14 @@ function iniciarNieve() {
 }
 
 function mostrarTextoTerminos() {
-    alert("RIFA NOTEBOOK BANGHÓ i7\nValor: $15.000\nSorteo al vender los 100 números.");
+    alert(
+`Términos y Condiciones: Rifa Notebook Banghó Best Pro T5
+i7 8gb RAM 480GB SSD
+
+1. OBJETO: Sorteo de Notebook Banghó i7 + Auriculares BT.
+2. VALOR: $15.000 por número.
+3. CONDICIÓN: El sorteo se realiza al vender los 100 números.
+4. SORTEO: Vivo por App Sorteos (se avisará 48hs antes).
+5. ENTREGA: Corrientes Capital (interior envío a cargo de organizador).`
+    );
 }
