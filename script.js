@@ -5,53 +5,53 @@ const CLAVE_ADMIN = "25767.Ctes@26";
 
 let numElegido = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    const grilla = document.getElementById('grilla');
-    for (let i = 1; i <= 100; i++) {
-        const div = document.createElement('div');
-        div.className = 'numero';
-        div.id = `num-${i}`;
-        div.textContent = i.toString().padStart(2, '0');
-        div.onclick = () => abrirRegistro(i);
-        grilla.appendChild(div);
-    }
-    iniciarNieve();
-    animarSanta();
-    cargarVendidos();
-});
-
-// LEER DE LA BASE DE DATOS
+// CARGAR NÚMEROS AL INICIAR
 async function cargarVendidos() {
     try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rifa?select=numero`, {
-            headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+            headers: { 
+                "apikey": SUPABASE_KEY, 
+                "Authorization": `Bearer ${SUPABASE_KEY}` 
+            }
         });
+        
+        if (!res.ok) throw new Error("Error en la respuesta de la base de datos");
+        
         const datos = await res.json();
-        datos.forEach(item => marcarComoVendido(item.numero));
+        
+        datos.forEach(item => {
+            const el = document.getElementById(`num-${item.numero}`);
+            if(el) {
+                el.classList.add('vendido');
+                el.onclick = null;
+            }
+        });
         document.getElementById('contador-ventas').innerText = `${datos.length}/100 Vendidos`;
-    } catch (e) { console.error("Error BD:", e); }
+    } catch (e) {
+        console.error("Error cargando datos:", e);
+    }
 }
 
-function marcarComoVendido(n) {
-    const el = document.getElementById(`num-${n}`);
-    if(el) { el.classList.add('vendido'); el.onclick = null; }
-}
-
-// INSERTAR EN LA BASE DE DATOS
+// GUARDAR EN BASE DE DATOS
 async function confirmarCompra() {
     const btn = document.getElementById('btn-confirmar-final');
+    
+    // Aseguramos que los nombres coincidan EXACTAMENTE con el SQL
     const datos = {
-        numero: numElegido,
-        nombre: document.getElementById('nombre').value,
-        dni: document.getElementById('dni').value,
-        celular: document.getElementById('celular').value,
-        direccion: document.getElementById('direccion').value
+        numero: parseInt(numElegido),
+        nombre: document.getElementById('nombre').value.trim(),
+        dni: document.getElementById('dni').value.trim(),
+        celular: document.getElementById('celular').value.trim(),
+        direccion: document.getElementById('direccion').value.trim()
     };
 
-    if(!datos.nombre || !datos.dni) return alert("Completa los datos");
+    if(!datos.nombre || !datos.dni || !datos.celular) {
+        alert("Por favor, completa los campos obligatorios.");
+        return;
+    }
 
     btn.disabled = true;
-    btn.innerText = "PROCESANDO...";
+    btn.innerText = "CONECTANDO...";
 
     try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rifa`, {
@@ -66,86 +66,16 @@ async function confirmarCompra() {
         });
 
         if(res.ok) {
-            alert("¡Reserva guardada en Base de Datos!");
+            alert("¡Número " + numElegido + " reservado con éxito!");
             location.reload();
-        } else { throw new Error(); }
+        } else {
+            const errorInfo = await res.json();
+            alert("Error de Base de Datos: " + (errorInfo.message || "No autorizado"));
+            console.error(errorInfo);
+            btn.disabled = false;
+        }
     } catch(e) {
-        alert("Error al guardar. Quizás el número ya se vendió.");
+        alert("Error de conexión: Verifica tu URL de Supabase.");
         btn.disabled = false;
     }
-}
-
-// FUNCIÓN DE ADMINISTRADOR: LIBERAR NÚMERO
-async function accesoAdmin() {
-    const pass = prompt("Clave Admin:");
-    if(pass !== CLAVE_ADMIN) return alert("Incorrecta");
-
-    const numParaLiberar = prompt("Número a liberar (1-100):");
-    if(!numParaLiberar) return;
-
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rifa?numero=eq.${numParaLiberar}`, {
-            method: 'DELETE',
-            headers: { 
-                "apikey": SUPABASE_KEY, 
-                "Authorization": `Bearer ${SUPABASE_KEY}` 
-            }
-        });
-        if(res.ok) {
-            alert("Número liberado con éxito");
-            location.reload();
-        }
-    } catch(e) { alert("Error al borrar"); }
-}
-
-// --- (Mantener funciones de cerrarModal, animarSanta, iniciarNieve, mostrarTextoTerminos igual que antes) ---
-function abrirRegistro(n) {
-    const audio = document.getElementById('sonido-campana');
-    audio.currentTime = 0; audio.play();
-    numElegido = n;
-    document.getElementById('txtNumeroSeleccionado').innerText = `NÚMERO ELEGIDO: ${n}`;
-    document.getElementById('modal').style.display = 'block';
-    document.getElementById('overlay').style.display = 'block';
-}
-
-function cerrarModal() {
-    document.getElementById('modal').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-}
-
-function validarCheck() {
-    const check = document.getElementById('acepto-terminos');
-    document.getElementById('btn-confirmar-final').disabled = !check.checked;
-}
-
-function animarSanta() {
-    const santa = document.getElementById('papa-noel');
-    let i = 0;
-    setInterval(() => {
-        const nums = document.querySelectorAll('.numero:not(.vendido)');
-        if(nums.length > 0) {
-            const target = nums[i % nums.length];
-            const rect = target.getBoundingClientRect();
-            const wrapper = document.querySelector('.grilla-wrapper').getBoundingClientRect();
-            santa.style.left = (rect.left - wrapper.left) + "px";
-            santa.style.top = (rect.top - wrapper.top - 25) + "px";
-            i++;
-        }
-    }, 1200);
-}
-
-function iniciarNieve() {
-    const container = document.getElementById('snow');
-    setInterval(() => {
-        const f = document.createElement('div');
-        f.innerHTML = "❄"; f.style.position = "absolute"; f.style.color = "white";
-        f.style.left = Math.random() * 100 + "vw"; f.style.top = "-20px";
-        container.appendChild(f);
-        f.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(100vh)' }], { duration: 5000 });
-        setTimeout(() => f.remove(), 5000);
-    }, 300);
-}
-
-function mostrarTextoTerminos() {
-    alert("Términos: Notebook Banghó i7. Sorteo al vender los 100 números. Precio $15.000.");
 }
